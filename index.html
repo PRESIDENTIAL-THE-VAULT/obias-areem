@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>obias-areem</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        html {
+            scroll-behavior: smooth;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .preload-container {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .preload-container img {
+            width: 1px;
+            height: 1px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #FAFAFA;
+            color: #1D1D1F;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            font-weight: 400;
+            line-height: 1.5;
+            -webkit-overflow-scrolling: touch;
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: #1D1D1F;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .glassmorphism {
+            background: rgba(245, 245, 247, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            color: #1D1D1F;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Scroll-triggered reveal animations - Apple style */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .widget-drop {
+            opacity: 0;
+            transform: translateY(50px) scale(0.96);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .widget-drop.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .glide-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .glide-left.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .drop-animation {
+            animation: dropIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 1;
+        }
+
+        @keyframes dropIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        .color-circle {
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            transform: translateZ(0) scale(1);
+            will-change: transform;
+            width: 88px;
+            height: 88px;
+            border: 3px solid transparent;
+        }
+        
+        .color-circle:hover {
+            transform: scale(1.08) translateZ(0);
+        }
+        
+        .color-circle.active {
+            transform: scale(1.12) translateZ(0);
+            border: 3px solid #F56300;
+            box-shadow: 0 8px 32px rgba(245, 99, 0, 0.3);
+        }
+        
+        .gallery-item {
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateZ(0) scale(1);
+            will-change: transform, opacity;
+            opacity: 1;
+        }
+        
+        .gallery-item.fade-out {
+            opacity: 1 !important;
+            transform: translateZ(0) scale(1);
+        }
+        
+        .gallery-item.fade-in {
+            opacity: 1;
+            transform: translateZ(0) scale(1);
+        }
+        
+        .gallery-img {
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+        }
+        
+        .parallax-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 160px 0;
+        }
+        
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 100%), url('assets/DSC_3952 cmpr.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .color-name-display {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: #1D1D1F;
+            margin-bottom: 3rem;
+        }
+        
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            border-radius: 50px;
+            margin: 16px 24px 0;
+            max-width: 1152px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 1001;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.08) translateZ(0);
+        }
+        
+        .section-spacing {
+            padding: 160px 0;
+            margin: 0;
+        }
+        
+        .section-buffer {
+            display: none;
+        }
+        
+        .gallery-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-image-container {
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            opacity: 1 !important;
+            animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            flex-shrink: 0;
+            filter: brightness(0.35);
+            transition: filter 0.3s ease, transform 0.3s ease;
+        }
+
+        .feature-item:hover .feature-icon {
+            filter: brightness(0.55);
+            transform: scale(1.05);
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+        
+        .featured-view {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: none;
+            margin-bottom: 24px;
+            background: #B0ABA7;
+            padding: 0;
+            line-height: 0;
+        }
+
+        .featured-img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateZ(0) scale(1);
+            will-change: opacity;
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .feature-item {
+            padding: 32px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+            
+            .color-name-display {
+                font-size: 1.5rem;
+            }
+            
+            .parallax-section {
+                padding: 80px 0;
+            }
+            
+            .section-spacing {
+                padding: 80px 0;
+            }
+        }
+        
+        /* FORCE IMAGE VISIBILITY - ALL IMAGES MUST BE VISIBLE */
+        img, .gallery-img, .featured-img, .parallax-bg {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .gallery-item, .featured-view {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+    </style>
+</head>
+<body x-data="obiasAreem()">
+    
+    <!-- Preload Container for All Towel Images -->
+    <div class="preload-container">
+        <img src="assets/DSC_3984 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3983 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3981 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3982 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3893 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3904 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3927 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3960 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3894 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3905 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3926 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3963 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3895 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3906 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3928 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3966 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3896 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3909 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3930 cmpr.jpg" alt="Preload">
+        <img src="assets/DSC_3965 cmpr.jpg" alt="Preload">
+    </div>
+    
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav px-6 py-4">
+        <div class="container flex justify-between items-center">
+            <div class="text-xl font-bold" style="letter-spacing: 0.05em; color: #F5F5F7; font-weight: 500;">obias-areem</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#hero" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Home</a>
+                <a href="#gallery" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Gallery</a>
+                <a href="#features" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Features</a>
+                <a href="#specs" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Specifications</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="parallax-section scroll-reveal">
+        <img src="assets/DSC_3952 cmpr.jpg" alt="Hero Background" class="parallax-bg" loading="eager">
+        <div class="absolute inset-0 hero-overlay"></div>
+        <div class="container relative z-10">
+            <div class="text-center max-w-5xl mx-auto" style="backdrop-filter: blur(40px); background: rgba(0, 0, 0, 0.4); border-radius: 24px; padding: 4rem 3rem;">
+                <p class="text-sm md:text-base font-medium mb-6 drop-animation tracking-widest" style="animation-delay: 0.1s; color: #F0E68C; letter-spacing: 0.2em; text-transform: uppercase;">
+                    FeatherSoft Microfiber Bath Towel
+                </p>
+                <h1 class="text-6xl md:text-8xl font-bold mb-10 drop-animation" style="animation-delay: 0.15s; letter-spacing: -0.02em; color: #FFFFFF; text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height: 1.05;">
+                    obias-areem
+                </h1>
+                <p class="text-lg md:text-xl mb-8 drop-animation max-w-3xl mx-auto" style="animation-delay: 0.25s; color: #F5F5F7; text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height: 1.6; font-weight: 300;">
+                    Our Towel is Deep-Absorbing & Luxuriously Soft | Naturally Fast-Drying | Easy to Roll & Carry | Crafted Using an Expertly Measured Fabric Combination
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dynamic Color Gallery -->
+    <section id="gallery" class="section-spacing scroll-reveal" style="background: #FBFBFF; margin: 0;">
+        <div class="container">
+            <h2 class="text-5xl md:text-6xl font-bold text-center mb-20" style="letter-spacing: -0.04em; color: #1D1D1F;">Choose Your Color</h2>
+            
+            <!-- Dynamic Color Name Display -->
+            <div class="text-center mb-16">
+                <div class="color-name-display" x-text="selectedColor" :class="{'visible': selectedColor}" style="color: #1D1D1F;"></div>
+            </div>
+            
+            <!-- Color Selector -->
+            <div class="flex justify-center gap-12 mb-20">
+                <template x-for="color in colors" :key="color.name">
+                    <div 
+                        class="color-circle rounded-full shadow-lg"
+                        :class="{'active': selectedColor === color.name}"
+                        :style="`background: ${color.hex}`"
+                        @click="selectColor(color.name)"
+                        :title="color.name"
+                    ></div>
+                </template>
+            </div>
+            
+            <!-- Gallery Grid - 1 Big + 4 Small Layout -->
+            <div class="gallery-container">
+                <!-- Featured View (Big Image) -->
+                <div class="featured-view">
+                    <img 
+                        :src="currentGallery[0].src" 
+                        :alt="currentGallery[0].label"
+                        class="featured-img"
+                        loading="eager"
+                    >
+                </div>
+                
+                <!-- Detail Images Grid (4 Small Images) -->
+                <div class="gallery-grid">
+                    <template x-for="(image, index) in currentGallery.slice(1)" :key="image.label">
+                        <div class="gallery-item glassmorphism p-6">
+                            <img 
+                                :src="image.src" 
+                                :alt="image.label"
+                                class="gallery-img mb-6"
+                                loading="eager"
+                                style="will-change: opacity;"
+                            >
+                            <h3 class="text-center font-bold text-xl" style="letter-spacing: -0.03em;" x-text="image.label"></h3>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Order Now Button -->
+                <div class="text-center mt-10">
+                    <a href="https://wa.me/94777314142?text=I%20want%20to%20order%20the%20FeatherSoft%20Towel" 
+                       target="_blank" 
+                       class="inline-block px-12 py-4 rounded-full font-bold text-white text-lg"
+                       style="background: #F56300; animation: pulse 2s infinite; box-shadow: 0 4px 20px rgba(245, 99, 0, 0.4);">
+                        Order Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="parallax-section scroll-reveal">
+        <img src="assets/DSC_3949 cmpr.jpg" alt="Features Background" class="parallax-bg">
+        <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);"></div>
+        <div class="container relative z-10">
+            <div class="glassmorphism widget-drop" style="animation-delay: 0.1s;">
+                <h2 class="text-5xl md:text-6xl font-bold text-center mb-20" style="letter-spacing: -0.03em;">Premium Features</h2>
+                <div class="max-w-4xl mx-auto">
+                    <div class="space-y-0">
+                        <div class="feature-item" style="animation-delay: 0.1s;">
+                            <img src="icons/1.png" alt="" class="feature-icon" loading="eager">
+                            <div class="feature-text">
+                                <h3 class="text-2xl font-bold mb-1" style="letter-spacing: -0.03em;">Deep-Absorbing</h3>
+                                <p class="text-gray-600 leading-relaxed">Our Towel is Deep-absorbing with advanced microfiber technology</p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="animation-delay: 0.15s;">
+                            <img src="icons/2.png" alt="" class="feature-icon" loading="eager">
+                            <div class="feature-text">
+                                <h3 class="text-2xl font-bold mb-1" style="letter-spacing: -0.03em;">Luxuriously Soft</h3>
+                                <p class="text-gray-600 leading-relaxed">Expertly measured fabric combination for ultimate comfort</p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="animation-delay: 0.2s;">
+                            <img src="icons/3.png" alt="" class="feature-icon" loading="eager" style="width: 72px; height: 72px; margin-left: -16px;">
+                            <div class="feature-text">
+                                <h3 class="text-2xl font-bold mb-1" style="letter-spacing: -0.03em;">Naturally Fast-Drying</h3>
+                                <p class="text-gray-600 leading-relaxed">Quick-dry technology for everyday convenience</p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="animation-delay: 0.25s;">
+                            <img src="icons/4.png" alt="" class="feature-icon" loading="eager">
+                            <div class="feature-text">
+                                <h3 class="text-2xl font-bold mb-1" style="letter-spacing: -0.03em;">Perfect for Traveling</h3>
+                                <p class="text-gray-600 leading-relaxed">Light weight, Easy to Roll & Carry anywhere</p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="animation-delay: 0.3s;">
+                            <img src="icons/5.png" alt="" class="feature-icon" loading="eager">
+                            <div class="feature-text">
+                                <h3 class="text-2xl font-bold mb-1" style="letter-spacing: -0.03em;">Perfect for Gym</h3>
+                                <p class="text-gray-600 leading-relaxed">Sweat-ready and ultra-absorbent for workouts</p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="animation-delay: 0.35s;">
+                            <img src="icons/5.png" alt="" class="feature-icon" loading="eager">
+                            <div class="feature-text">
+                                <h3 class="text-2xl font-bold mb-1" style="letter-spacing: -0.03em;">Perfect for Sport Use</h3>
+                                <p class="text-gray-600 leading-relaxed">Highly absorbent for any athletic activity</p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="animation-delay: 0.4s;">
+                            <img src="icons/6.png" alt="" class="feature-icon" loading="eager">
+                            <div class="feature-text">
+                                <h3 class="text-2xl font-bold mb-1" style="letter-spacing: -0.03em;">Perfect for Bath Use</h3>
+                                <p class="text-gray-600 leading-relaxed">Soft & Gentle on Skin, quick-dry towel comfort</p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="animation-delay: 0.45s;">
+                            <img src="icons/7.png" alt="" class="feature-icon" loading="eager">
+                            <div class="feature-text">
+                                <h3 class="text-2xl font-bold mb-1" style="letter-spacing: -0.03em;">Expertly Crafted</h3>
+                                <p class="text-gray-600 leading-relaxed">Crafted using an expertly measured fabric combination for effortless luxury and long-lasting performance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specifications Section -->
+    <section id="specs" class="parallax-section scroll-reveal" style="margin: 0;">
+        <img src="assets/DSC_3944 cmpr.jpg" alt="Specifications Background" class="parallax-bg">
+        <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);"></div>
+        <div class="container relative z-10">
+            <div class="glassmorphism widget-drop" style="animation-delay: 0.2s;">
+                <h2 class="text-5xl md:text-6xl font-bold text-center mb-20" style="letter-spacing: -0.03em; color: #1D1D1F;">Technical Specifications</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                    <div>
+                        <h3 class="text-3xl font-bold mb-12" style="letter-spacing: -0.03em; color: #1D1D1F;">Dimensions</h3>
+                        <div class="space-y-8">
+                            <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                                <span class="text-gray-600 text-lg font-bold" style="color: #1D1D1F;">Metric</span>
+                                <span class="font-bold text-2xl" style="color: #1D1D1F;">70cm X 140cm</span>
+                            </div>
+                            <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                                <span class="text-gray-600 text-lg font-bold" style="color: #1D1D1F;">Imperial</span>
+                                <span class="font-bold text-2xl" style="color: #1D1D1F;">28" X 55"</span>
+                            </div>
+                            <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                                <span class="text-gray-600 text-lg font-bold" style="color: #1D1D1F;">Weight</span>
+                                <span class="font-bold text-2xl" style="color: #1D1D1F;">450g</span>
+                            </div>
+                            <div class="flex justify-between items-center py-4">
+                                <span class="text-gray-600 text-lg font-bold" style="color: #1D1D1F;">Material</span>
+                                <span class="font-bold text-2xl" style="color: #1D1D1F;">100% Microfiber</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center glide-left" style="padding: 2rem;">
+                        <img src="assets/towelsize.png" alt="Towel Size" style="width: 100%; object-fit: contain; margin: 0 auto; opacity: 1 !important; visibility: visible !important;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Business Button -->
+    <a href="https://wa.me/94777314142?text=I%27m%20interested%20in%20the%20obias-areem%20FeatherSoft%20towel%20series." 
+       target="_blank" 
+       class="whatsapp-float bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600">
+        <i class="fab fa-whatsapp text-2xl"></i>
+    </a>
+
+    <script>
+        function obiasAreem() {
+            return {
+                selectedColor: 'Amethyst Purple',
+                colors: [
+                    { name: 'Amethyst Purple', hex: '#8B5CF6' },
+                    { name: 'Cobalt Blue', hex: '#3B82F6' },
+                    { name: 'Neon Orange', hex: '#F97316' },
+                    { name: 'Pewter Gray', hex: '#6B7280' }
+                ],
+                galleries: {
+                    'Amethyst Purple': [
+                        { src: 'assets/DSC_3984 cmpr.jpg', label: 'Fully Spread' },
+                        { src: 'assets/DSC_3893 cmpr.jpg', label: 'Fold' },
+                        { src: 'assets/DSC_3904 cmpr.jpg', label: 'Detail' },
+                        { src: 'assets/DSC_3927 cmpr.jpg', label: 'Edge' },
+                        { src: 'assets/DSC_3960 cmpr.jpg', label: 'Roll' }
+                    ],
+                    'Cobalt Blue': [
+                        { src: 'assets/DSC_3983 cmpr.jpg', label: 'Fully Spread' },
+                        { src: 'assets/DSC_3894 cmpr.jpg', label: 'Fold' },
+                        { src: 'assets/DSC_3905 cmpr.jpg', label: 'Detail' },
+                        { src: 'assets/DSC_3926 cmpr.jpg', label: 'Edge' },
+                        { src: 'assets/DSC_3963 cmpr.jpg', label: 'Roll' }
+                    ],
+                    'Neon Orange': [
+                        { src: 'assets/DSC_3981 cmpr.jpg', label: 'Fully Spread' },
+                        { src: 'assets/DSC_3895 cmpr.jpg', label: 'Fold' },
+                        { src: 'assets/DSC_3906 cmpr.jpg', label: 'Detail' },
+                        { src: 'assets/DSC_3928 cmpr.jpg', label: 'Edge' },
+                        { src: 'assets/DSC_3966 cmpr.jpg', label: 'Roll' }
+                    ],
+                    'Pewter Gray': [
+                        { src: 'assets/DSC_3982 cmpr.jpg', label: 'Fully Spread' },
+                        { src: 'assets/DSC_3896 cmpr.jpg', label: 'Fold' },
+                        { src: 'assets/DSC_3909 cmpr.jpg', label: 'Detail' },
+                        { src: 'assets/DSC_3930 cmpr.jpg', label: 'Edge' },
+                        { src: 'assets/DSC_3965 cmpr.jpg', label: 'Roll' }
+                    ]
+                },
+                get currentGallery() {
+                    return this.galleries[this.selectedColor];
+                },
+                selectColor(colorName) {
+                    if (this.selectedColor === colorName) return;
+                    
+                    this.selectedColor = colorName;
+                    
+                    // Images stay visible - no hiding logic
+                    // Trigger color name display animation
+                    setTimeout(() => {
+                        const colorDisplay = document.querySelector('.color-name-display');
+                        if (colorDisplay) {
+                            colorDisplay.classList.remove('visible');
+                            void colorDisplay.offsetWidth; // Force reflow
+                            colorDisplay.classList.add('visible');
+                        }
+                    }, 100);
+                },
+                init() {
+                    // Stagger widget drop delays via CSS custom property
+                    const widgetDrops = document.querySelectorAll('.widget-drop');
+                    widgetDrops.forEach((widget, index) => {
+                        widget.style.transitionDelay = `${index * 0.12}s`;
+                    });
+
+                    // IntersectionObserver for buttery scroll reveals
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('revealed');
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, {
+                        threshold: 0.15,
+                        rootMargin: '0px 0px -50px 0px'
+                    });
+
+                    document.querySelectorAll('.scroll-reveal, .widget-drop, .glide-left, .feature-item').forEach(el => {
+                        observer.observe(el);
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>
