@@ -246,6 +246,16 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+        .sticky-nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .sticky-nav .nav-links > * + * {
+            margin-left: 0 !important;
+        }
         
         .whatsapp-float {
             position: fixed;
@@ -354,29 +364,37 @@
                 border-radius: 40px;
             }
 
+                .sticky-nav .container {
+                flex-wrap: nowrap;
+                gap: 8px;
+            }
+
+            .sticky-nav .container > div:first-child {
+                font-size: 0.9rem !important;
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
+
             .sticky-nav .nav-links {
                 display: flex;
-                gap: 10px;
+                gap: 8px;
                 overflow-x: auto;
                 scrollbar-width: none;
                 -webkit-overflow-scrolling: touch;
-                max-width: 70vw;
-                justify-content: flex-end;
+                flex-shrink: 1;
+                min-width: 0;
             }
 
             .sticky-nav .nav-links::-webkit-scrollbar {
                 display: none;
             }
 
-            .sticky-nav .nav-links > * + * {
-                margin-left: 0 !important;
-            }
-
             .sticky-nav .nav-links a {
-                font-size: 0.65rem;
-                letter-spacing: 0.02em;
+                font-size: 0.6rem;
+                letter-spacing: 0.01em;
                 white-space: nowrap;
                 padding: 2px 0;
+                flex-shrink: 0;
             }
 
             .color-circle {
@@ -586,11 +604,11 @@
     <nav class="sticky-nav px-6 py-4">
         <div class="container flex justify-between items-center">
             <div class="text-xl font-bold" style="letter-spacing: 0.05em; color: #F5F5F7; font-weight: 500;">obias-areem</div>
-            <div class="flex space-x-8 nav-links">
-                <a href="#hero" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Home</a>
-                <a href="#gallery" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Gallery</a>
-                <a href="#features" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Features</a>
-                <a href="#specs" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Specifications</a>
+            <div class="flex nav-links">
+                <a href="#hero" class="hover:opacity-80 transition-opacity nav-link" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Home</a>
+                <a href="#gallery" class="hover:opacity-80 transition-opacity nav-link" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Gallery</a>
+                <a href="#features" class="hover:opacity-80 transition-opacity nav-link" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Features</a>
+                <a href="#specs" class="hover:opacity-80 transition-opacity nav-link" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Specifications</a>
             </div>
         </div>
     </nav>
