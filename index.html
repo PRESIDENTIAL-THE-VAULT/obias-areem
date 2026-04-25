@@ -16,7 +16,7 @@
             width: 100%;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
         }
         
         .preload-container {
@@ -46,13 +46,12 @@
             width: 100%;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
             scroll-behavior: smooth;
             font-weight: 400;
             line-height: 1.5;
             -webkit-overflow-scrolling: touch;
-            backface-visibility: hidden;
-            perspective: 1000px;
+            overflow-y: auto;
+            min-height: 100vh;
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -148,9 +147,16 @@
             cursor: pointer;
             transform: translateZ(0) scale(1);
             will-change: transform;
-            width: 88px;
-            height: 88px;
+            width: 72px;
+            height: 72px;
+            min-width: 72px;
+            min-height: 72px;
+            flex-shrink: 0;
+            flex-grow: 0;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
             border: 3px solid transparent;
+            display: block;
         }
         
         .color-circle:hover {
@@ -341,6 +347,164 @@
             .detail-grid {
                 grid-template-columns: 1fr;
             }
+
+            .sticky-nav {
+                margin: 8px 12px 0;
+                padding: 8px 12px;
+                border-radius: 40px;
+            }
+
+            .sticky-nav .nav-links {
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+                max-width: 70vw;
+                justify-content: flex-end;
+            }
+
+            .sticky-nav .nav-links::-webkit-scrollbar {
+                display: none;
+            }
+
+            .sticky-nav .nav-links > * + * {
+                margin-left: 0 !important;
+            }
+
+            .sticky-nav .nav-links a {
+                font-size: 0.65rem;
+                letter-spacing: 0.02em;
+                white-space: nowrap;
+                padding: 2px 0;
+            }
+
+            .color-circle {
+                width: 56px !important;
+                height: 56px !important;
+                min-width: 56px !important;
+                min-height: 56px !important;
+                max-width: 56px !important;
+                max-height: 56px !important;
+                aspect-ratio: 1 / 1;
+                border-radius: 50% !important;
+                align-self: center;
+                flex: none;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .gallery-item {
+                padding: 1rem;
+            }
+
+            .feature-item {
+                gap: 12px;
+                padding: 16px 0;
+            }
+
+            .feature-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .feature-text h3 {
+                font-size: 1.1rem !important;
+            }
+
+            .feature-text p {
+                font-size: 0.85rem;
+            }
+
+            .parallax-section {
+                padding: 60px 0;
+            }
+
+            .section-spacing {
+                padding: 60px 0;
+            }
+
+            .featured-img {
+                max-height: 280px;
+            }
+
+            .hero-inner {
+                padding: 1.5rem 1rem !important;
+                border-radius: 16px !important;
+                margin: 0 12px;
+            }
+
+            .hero-inner h1 {
+                font-size: clamp(1.6rem, 9vw, 2.8rem) !important;
+                white-space: nowrap !important;
+                word-break: keep-all !important;
+                overflow-wrap: normal !important;
+                line-height: 1.1 !important;
+            }
+
+            .hero-inner .hero-subtitle {
+                font-size: 0.65rem !important;
+                letter-spacing: 0.08em !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .hero-inner .hero-desc {
+                font-size: 0.85rem !important;
+                line-height: 1.5 !important;
+                margin-bottom: 0 !important;
+            }
+
+            .section-title {
+                font-size: 2rem !important;
+            }
+
+            .color-selector-gap {
+                gap: 1rem !important;
+            }
+
+            .specs-grid {
+                gap: 2rem !important;
+            }
+
+            .specs-grid h3 {
+                font-size: 1.5rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .specs-grid .flex span:first-child,
+            .specs-grid .flex span:last-child {
+                font-size: 1rem !important;
+            }
+
+            .specs-grid .glide-left {
+                padding: 0.5rem !important;
+            }
+
+            .specs-grid img {
+                max-height: 260px;
+                width: 100%;
+            }
+
+            .glassmorphism {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+
+            .parallax-section {
+                padding: 100px 0;
+                min-height: auto;
+            }
+
+            .section-spacing {
+                padding: 80px 0;
+            }
         }
         
         .gallery-grid {
@@ -422,7 +586,7 @@
     <nav class="sticky-nav px-6 py-4">
         <div class="container flex justify-between items-center">
             <div class="text-xl font-bold" style="letter-spacing: 0.05em; color: #F5F5F7; font-weight: 500;">obias-areem</div>
-            <div class="hidden md:flex space-x-8">
+            <div class="flex space-x-8 nav-links">
                 <a href="#hero" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Home</a>
                 <a href="#gallery" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Gallery</a>
                 <a href="#features" class="hover:opacity-80 transition-opacity" style="color: #F0E68C; font-weight: 500; letter-spacing: 0.05em;">Features</a>
@@ -436,14 +600,14 @@
         <img src="assets/DSC_3952 cmpr.jpg" alt="Hero Background" class="parallax-bg" loading="eager">
         <div class="absolute inset-0 hero-overlay"></div>
         <div class="container relative z-10">
-            <div class="text-center max-w-5xl mx-auto" style="backdrop-filter: blur(40px); background: rgba(0, 0, 0, 0.4); border-radius: 24px; padding: 4rem 3rem;">
-                <p class="text-sm md:text-base font-medium mb-6 drop-animation tracking-widest" style="animation-delay: 0.1s; color: #F0E68C; letter-spacing: 0.2em; text-transform: uppercase;">
+            <div class="text-center max-w-5xl mx-auto hero-inner" style="backdrop-filter: blur(40px); background: rgba(0, 0, 0, 0.4); border-radius: 24px; padding: 4rem 3rem;">
+                <p class="text-sm md:text-base font-medium mb-6 drop-animation tracking-widest hero-subtitle" style="animation-delay: 0.1s; color: #F0E68C; letter-spacing: 0.2em; text-transform: uppercase;">
                     FeatherSoft Microfiber Bath Towel
                 </p>
-                <h1 class="text-6xl md:text-8xl font-bold mb-10 drop-animation" style="animation-delay: 0.15s; letter-spacing: -0.02em; color: #FFFFFF; text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height: 1.05;">
+                <h1 class="text-6xl md:text-8xl font-bold mb-10 drop-animation" style="animation-delay: 0.15s; letter-spacing: -0.02em; color: #FFFFFF; text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height: 1.05; white-space: nowrap;">
                     obias-areem
                 </h1>
-                <p class="text-lg md:text-xl mb-8 drop-animation max-w-3xl mx-auto" style="animation-delay: 0.25s; color: #F5F5F7; text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height: 1.6; font-weight: 300;">
+                <p class="text-lg md:text-xl mb-8 drop-animation max-w-3xl mx-auto hero-desc" style="animation-delay: 0.25s; color: #F5F5F7; text-shadow: 0 2px 10px rgba(0,0,0,0.3); line-height: 1.6; font-weight: 300;">
                     Our Towel is Deep-Absorbing & Luxuriously Soft | Naturally Fast-Drying | Easy to Roll & Carry | Crafted Using an Expertly Measured Fabric Combination
                 </p>
             </div>
@@ -453,7 +617,7 @@
     <!-- Dynamic Color Gallery -->
     <section id="gallery" class="section-spacing scroll-reveal" style="background: #FBFBFF; margin: 0;">
         <div class="container">
-            <h2 class="text-5xl md:text-6xl font-bold text-center mb-20" style="letter-spacing: -0.04em; color: #1D1D1F;">Choose Your Color</h2>
+            <h2 class="text-5xl md:text-6xl font-bold text-center mb-20 section-title" style="letter-spacing: -0.04em; color: #1D1D1F;">Choose Your Color</h2>
             
             <!-- Dynamic Color Name Display -->
             <div class="text-center mb-16">
@@ -461,10 +625,10 @@
             </div>
             
             <!-- Color Selector -->
-            <div class="flex justify-center gap-12 mb-20">
+            <div class="flex justify-center gap-12 mb-20 color-selector-gap">
                 <template x-for="color in colors" :key="color.name">
                     <div 
-                        class="color-circle rounded-full shadow-lg"
+                        class="color-circle shadow-lg"
                         :class="{'active': selectedColor === color.name}"
                         :style="`background: ${color.hex}`"
                         @click="selectColor(color.name)"
@@ -520,7 +684,7 @@
         <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);"></div>
         <div class="container relative z-10">
             <div class="glassmorphism widget-drop" style="animation-delay: 0.1s;">
-                <h2 class="text-5xl md:text-6xl font-bold text-center mb-20" style="letter-spacing: -0.03em;">Premium Features</h2>
+                <h2 class="text-5xl md:text-6xl font-bold text-center mb-20 section-title" style="letter-spacing: -0.03em;">Premium Features</h2>
                 <div class="max-w-4xl mx-auto">
                     <div class="space-y-0">
                         <div class="feature-item" style="animation-delay: 0.1s;">
@@ -591,8 +755,8 @@
         <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);"></div>
         <div class="container relative z-10">
             <div class="glassmorphism widget-drop" style="animation-delay: 0.2s;">
-                <h2 class="text-5xl md:text-6xl font-bold text-center mb-20" style="letter-spacing: -0.03em; color: #1D1D1F;">Technical Specifications</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <h2 class="text-5xl md:text-6xl font-bold text-center mb-20 section-title" style="letter-spacing: -0.03em; color: #1D1D1F;">Technical Specifications</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center specs-grid">
                     <div>
                         <h3 class="text-3xl font-bold mb-12" style="letter-spacing: -0.03em; color: #1D1D1F;">Dimensions</h3>
                         <div class="space-y-8">
