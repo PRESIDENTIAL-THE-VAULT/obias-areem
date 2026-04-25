@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com?v=2"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js?v=2" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         html {
@@ -50,8 +50,8 @@
             font-weight: 400;
             line-height: 1.5;
             -webkit-overflow-scrolling: touch;
-            overflow-y: auto;
             min-height: 100vh;
+            overflow-x: clip;
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -200,7 +200,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
             padding: 160px 0;
         }
         
@@ -377,16 +376,9 @@
 
             .sticky-nav .nav-links {
                 display: flex;
-                gap: 8px;
-                overflow-x: auto;
-                scrollbar-width: none;
-                -webkit-overflow-scrolling: touch;
+                gap: 6px;
                 flex-shrink: 1;
                 min-width: 0;
-            }
-
-            .sticky-nav .nav-links::-webkit-scrollbar {
-                display: none;
             }
 
             .sticky-nav .nav-links a {
@@ -404,10 +396,11 @@
                 min-height: 56px !important;
                 max-width: 56px !important;
                 max-height: 56px !important;
-                aspect-ratio: 1 / 1;
+                aspect-ratio: 1 / 1 !important;
                 border-radius: 50% !important;
                 align-self: center;
-                flex: none;
+                flex: none !important;
+                padding: 0 !important;
             }
 
             .gallery-grid {
@@ -502,8 +495,9 @@
             }
 
             .specs-grid img {
-                max-height: 260px;
+                max-height: 320px;
                 width: 100%;
+                min-height: 200px;
             }
 
             .glassmorphism {
@@ -647,6 +641,7 @@
                 <template x-for="color in colors" :key="color.name">
                     <div 
                         class="color-circle shadow-lg"
+                        style="border-radius: 50%; aspect-ratio: 1/1;"
                         :class="{'active': selectedColor === color.name}"
                         :style="`background: ${color.hex}`"
                         @click="selectColor(color.name)"
